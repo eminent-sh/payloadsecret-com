@@ -1,14 +1,2 @@
 # System
 .DS_Store
-*.pid
-*.seed
-*.pid.lock
-
-# IDE
-.idea/
-.vscode/
-.vscode-test/
-*.swp
-*.swo
-*.swn
-*.bak
