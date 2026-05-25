@@ -64,12 +64,16 @@
         </div>
 
         <div class="usage-section">
-          <div class="live-env-header">
-            <h2>Environment variable</h2>
-            <button id="copyEnvBtn" class="copy-env-btn" disabled>Copy line</button>
-          </div>
+          <h2>Environment variable</h2>
           <p>Add this line to your environment:</p>
-          <pre id="liveEnvExample" class="live-env-example">PAYLOAD_SECRET="generate a secret above"</pre>
+          <div class="secret-display">
+            <pre id="liveEnvExample">PAYLOAD_SECRET="generate a secret above"</pre>
+            <div class="button-group">
+              <button id="copyEnvBtn" class="icon-btn" disabled aria-label="Copy line">
+                <span class="icon">📋</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="usage-section">

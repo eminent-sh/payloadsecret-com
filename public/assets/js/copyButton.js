@@ -33,17 +33,9 @@ class CopyButton {
   }
 
   showCopiedFeedback() {
-    if (this.icon) {
-      this.icon.textContent = "✓";
-      setTimeout(() => {
-        this.icon.textContent = this.initialLabel;
-      }, 2000);
-      return;
-    }
-
-    this.button.textContent = "Copied";
+    this.icon.textContent = "✓";
     setTimeout(() => {
-      this.button.textContent = this.initialLabel;
+      this.icon.textContent = this.initialLabel;
     }, 2000);
   }
 

@@ -56,19 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.copyEnvBtn.disabled = false;
   }
 
-  function showUsageInfo() {
-    if (state.showUsage) return;
-    state.showUsage = true;
-    elements.usageInfo.classList.remove("hidden");
-  }
-
   function generateSecret() {
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
     state.secret = btoa(String.fromCharCode(...array));
     updateSecretDisplay();
     elements.secretContainer.classList.remove("hidden");
-    showUsageInfo();
 
     gtag("event", "generate_secret", {
       event_category: "Interaction",

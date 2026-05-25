@@ -159,22 +159,13 @@ pre {
   padding-bottom: 8px;
 }
 
-.live-env-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-.live-env-header h2 {
-  margin: 0;
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.live-env-example {
-  border: 1px solid var(--bg-tertiary);
+.icon-btn:disabled:hover {
+  background-color: rgba(39, 39, 42, 0.7);
 }
 
 .usage-list {
@@ -202,28 +193,10 @@ pre {
   color: var(--accent-hover);
 }
 
-.copy-env-btn {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--bg-tertiary);
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: var(--transition);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.copy-env-btn:hover:not(:disabled) {
-  background-color: var(--text-secondary);
-  color: var(--bg-primary);
-}
-
-.copy-env-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.usage-info .secret-display pre {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
 }
 
 .usage-info p {
