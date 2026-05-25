@@ -26,40 +26,19 @@
 <body>
   <main>
     <div class="container">
+
       <div class="header">
-        <h1>Can you keep a secret?</h1>
-        <p>
-          Generate random 32-byte, base64 secrets for your Payload instance.
-        </p>
+        <h1>Generate random 32-byte, base64 secrets for your Payload instance.</h1>
       </div>
 
-      <div class="controls">
-        <button id="generateBtn" class="btn">Generate</button>
-        <button id="usageBtn" class="btn">How to use</button>
-      </div>
+      <div class="layout">
+        <div class="layout-col layout-col--docs">
 
-      <div id="secretContainer" class="secret-container hidden">
-        <div class="secret-display">
-          <pre id="secretField"></pre>
-          <div class="button-group">
-            <button id="toggleVisibilityBtn" class="icon-btn">
-              <span id="eyeIcon" class="icon">🙉</span>
-            </button>
-            <button id="copyBtn" class="icon-btn">
-              <span id="copyIcon" class="icon">📋</span>
-            </button>
-          </div>
-        </div>
-        <div class="cli-instructions">
-          <p>Generate from your terminal and copy to the clipboard:</p>
-          <pre>curl -fsSL https://payloadsecret.com/generate | pbcopy</pre>
-          <p class="cli-instructions-note">On Linux, use <code>xclip -selection clipboard</code> instead of <code>pbcopy</code>.</p>
-        </div>
-      </div>
+      <!-- Usage docs — always visible -->
+      <section class="card usage-card">
 
-      <div id="usageInfo" class="usage-info hidden">
         <div class="usage-section">
-          <h2>What is <code>PAYLOAD_SECRET</code>?</h2>
+          <h2>Key</h2>
           <p>
             <code>PAYLOAD_SECRET</code> is a required environment variable for Payload. It is a long,
             random, unguessable string that Payload uses for encryption workflows — signing and
@@ -69,20 +48,16 @@
         </div>
 
         <div class="usage-section">
-          <h2>Environment variable</h2>
+          <h2>Value</h2>
           <p>Add this line to your environment:</p>
-          <div class="secret-display">
-            <pre id="liveEnvExample">PAYLOAD_SECRET="generate a secret above"</pre>
-            <div class="button-group">
-              <button id="copyEnvBtn" class="icon-btn" disabled aria-label="Copy line">
-                <span class="icon">📋</span>
-              </button>
-            </div>
+          <div class="code-row">
+            <pre id="liveEnvExample" class="code-block code-block--row">PAYLOAD_SECRET="generate a secret above"</pre>
+            <button id="copyEnvBtn" class="icon-btn" disabled aria-label="Copy line">📋</button>
           </div>
         </div>
 
         <div class="usage-section">
-          <h2>Where to set it</h2>
+          <h2>Application</h2>
           <ul class="usage-list">
             <li>
               <strong>Local development:</strong> add the line to a <code>.env</code> file at your
@@ -101,9 +76,9 @@
         </div>
 
         <div class="usage-section">
-          <h2>In your Payload config</h2>
+          <h2>Config</h2>
           <p>Reference the variable in <code>payload.config.ts</code>:</p>
-          <pre>import { buildConfig } from 'payload'
+          <pre class="code-block code-block--multiline">import { buildConfig } from 'payload'
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET,
@@ -116,20 +91,83 @@ export default buildConfig({
           </p>
         </div>
 
-        <div class="usage-section">
-          <h2>Good to know</h2>
-          <ul class="usage-list">
-            <li>Never commit secrets to git or expose them in client-side code (avoid the <code>NEXT_PUBLIC_</code> prefix).</li>
-            <li>Use a unique secret for each environment — local, staging, and production.</li>
-            <li>If a secret is leaked, rotate it; existing sessions and tokens may be invalidated.</li>
-            <li>This generator produces a 32-byte random value encoded as base64, which meets Payload's requirement for a long, unguessable secret.</li>
-          </ul>
+      </section>
+
+        </div>
+
+        <div class="layout-col layout-col--tools">
+
+      <!-- API — primary surface -->
+      <section class="card api-card">
+        <h2>Endpoint</h2>
+        <p>
+          Fetch a fresh 32-byte base64 secret from
+          <code>https://payloadsecret.com/generate</code>.
+        </p>
+
+        <div class="tabs" role="tablist" aria-label="API examples">
+          <button class="tab" role="tab" data-tab="curl" aria-selected="true">curl</button>
+          <button class="tab" role="tab" data-tab="clipboard" aria-selected="false">curl + clipboard</button>
+          <button class="tab" role="tab" data-tab="fetch" aria-selected="false">fetch</button>
+        </div>
+
+        <div class="tab-panel" data-panel="curl" role="tabpanel">
+          <pre id="code-curl" class="code-block code-block--row">curl -fsSL https://payloadsecret.com/generate</pre>
+          <button class="icon-btn copy-code-btn" data-copy-target="code-curl" aria-label="Copy">📋</button>
+        </div>
+
+        <div class="tab-panel tab-panel--stacked hidden" data-panel="clipboard" role="tabpanel">
+          <pre id="code-clipboard" class="code-block code-block--multiline"># macOS
+curl -fsSL https://payloadsecret.com/generate | pbcopy
+
+# Linux
+curl -fsSL https://payloadsecret.com/generate | xclip -selection clipboard</pre>
+          <button class="icon-btn copy-code-btn" data-copy-target="code-clipboard" aria-label="Copy">📋</button>
+        </div>
+
+        <div class="tab-panel tab-panel--stacked hidden" data-panel="fetch" role="tabpanel">
+          <pre id="code-fetch" class="code-block code-block--multiline">const secret = await fetch('https://payloadsecret.com/generate')
+  .then(r => r.text());
+
+console.log(secret);</pre>
+          <button class="icon-btn copy-code-btn" data-copy-target="code-fetch" aria-label="Copy">📋</button>
+        </div>
+
+      </section>
+
+      <!-- In-browser generator -->
+      <section class="card generator-card">
+        <h2>Generator</h2>
+        <div class="code-row">
+          <pre id="secretField" class="code-block code-block--row"></pre>
+          <div class="icon-group">
+            <button id="toggleVisibilityBtn" class="icon-btn" aria-label="Toggle visibility">
+              <span id="eyeIcon">🙉</span>
+            </button>
+            <button id="refreshBtn" class="icon-btn" aria-label="Regenerate secret">🔄</button>
+            <button id="copyBtn" class="icon-btn" aria-label="Copy secret">
+              <span id="copyIcon">📋</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card practices-card">
+        <h2>Remember</h2>
+        <ul class="usage-list">
+          <li>Never commit secrets to git or expose them in client-side code (avoid the <code>NEXT_PUBLIC_</code> prefix).</li>
+          <li>Use a unique secret for each environment — local, staging, and production.</li>
+          <li>If a secret is leaked, rotate it; existing sessions and tokens may be invalidated.</li>
+        </ul>
+      </section>
+
         </div>
       </div>
 
       <div class="footer">
         <a href="https://github.com/eminent-sh/payloadsecret.com" target="_blank" rel="noopener noreferrer">♥ eminent.sh</a>
       </div>
+
     </div>
   </main>
   <script src="assets/js/copyButton.js"></script>

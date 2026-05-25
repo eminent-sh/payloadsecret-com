@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const state = {
     secret: "",
     showSecret: false,
-    showUsage: false,
   };
 
   const PLACEHOLDER_ENV_LINE = 'PAYLOAD_SECRET="generate a secret above"';
@@ -12,12 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     state.secret ? `PAYLOAD_SECRET="${state.secret}"` : "";
 
   const elements = {
-    generateBtn: document.getElementById("generateBtn"),
-    usageBtn: document.getElementById("usageBtn"),
-    secretContainer: document.getElementById("secretContainer"),
     secretField: document.getElementById("secretField"),
     toggleVisibilityBtn: document.getElementById("toggleVisibilityBtn"),
-    usageInfo: document.getElementById("usageInfo"),
+    refreshBtn: document.getElementById("refreshBtn"),
     liveEnvExample: document.getElementById("liveEnvExample"),
     copyEnvBtn: document.getElementById("copyEnvBtn"),
     eyeIcon: document.getElementById("eyeIcon"),
@@ -56,17 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.copyEnvBtn.disabled = false;
   }
 
-  function generateSecret() {
+  function generateSecret(isRefresh) {
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
     state.secret = btoa(String.fromCharCode(...array));
     updateSecretDisplay();
-    elements.secretContainer.classList.remove("hidden");
 
-    gtag("event", "generate_secret", {
-      event_category: "Interaction",
-      event_label: "Generate Secret",
-    });
+    if (isRefresh) {
+      gtag("event", "regenerate_secret", {
+        event_category: "Interaction",
+        event_label: "Regenerate Secret",
+      });
+    } else {
+      gtag("event", "generate_secret", {
+        event_category: "Interaction",
+        event_label: "Auto Generate Secret",
+      });
+    }
   }
 
   function toggleSecretVisibility() {
@@ -80,20 +82,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function toggleUsage() {
-    state.showUsage = !state.showUsage;
-    elements.usageInfo.classList.toggle("hidden");
+  function setupTabs() {
+    const tabs = document.querySelectorAll(".tabs .tab");
+    const panels = document.querySelectorAll(".tab-panel");
 
-    gtag("event", "toggle_usage", {
-      event_category: "Interaction",
-      event_label: state.showUsage ? "Show Usage" : "Hide Usage",
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+
+        tabs.forEach((t) => t.setAttribute("aria-selected", "false"));
+        tab.setAttribute("aria-selected", "true");
+
+        panels.forEach((panel) => {
+          if (panel.dataset.panel === target) {
+            panel.classList.remove("hidden");
+          } else {
+            panel.classList.add("hidden");
+          }
+        });
+
+        gtag("event", "switch_tab", {
+          event_category: "Interaction",
+          event_label: target,
+        });
+      });
     });
   }
 
-  elements.generateBtn.addEventListener("click", generateSecret);
-  elements.toggleVisibilityBtn.addEventListener(
-    "click",
-    toggleSecretVisibility
-  );
-  elements.usageBtn.addEventListener("click", toggleUsage);
+  elements.refreshBtn.addEventListener("click", () => generateSecret(true));
+  elements.toggleVisibilityBtn.addEventListener("click", toggleSecretVisibility);
+
+  setupTabs();
+  generateSecret(false);
 });
