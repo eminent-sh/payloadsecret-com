@@ -3,10 +3,8 @@ class CopyButton {
     this.button = buttonElement;
     this.getValue = getValue;
     this.eventLabel = eventLabel;
-    this.icon = this.button.querySelector(".icon");
-    this.initialLabel = this.icon
-      ? this.icon.textContent
-      : this.button.textContent;
+    this.icon = this.button.querySelector(".icon") || this.button;
+    this.initialLabel = this.icon.textContent;
     this.setupEventListeners();
   }
 
@@ -45,9 +43,32 @@ class CopyButton {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Secret generator copy button
   const copyBtn = document.getElementById("copyBtn");
-  new CopyButton(copyBtn, () => window.getSecret(), "Copy Secret");
+  new CopyButton(
+    copyBtn,
+    () => window.getSecret(),
+    "Copy Secret"
+  );
 
+  // Env var copy button
   const copyEnvBtn = document.getElementById("copyEnvBtn");
-  new CopyButton(copyEnvBtn, () => window.getEnvLine(), "Copy Env Line");
+  new CopyButton(
+    copyEnvBtn,
+    () => window.getEnvLine(),
+    "Copy Env Line"
+  );
+
+  // API tab panel copy buttons
+  document.querySelectorAll(".copy-code-btn").forEach((btn) => {
+    const targetId = btn.dataset.copyTarget;
+    new CopyButton(
+      btn,
+      () => {
+        const el = document.getElementById(targetId);
+        return el ? el.textContent : "";
+      },
+      `Copy Code: ${targetId}`
+    );
+  });
 });
