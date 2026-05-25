@@ -82,6 +82,41 @@ main {
   margin: 32px 0;
 }
 
+.cli-instructions {
+  margin-top: 20px;
+  text-align: left;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cli-instructions p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.cli-instructions pre {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--bg-tertiary);
+  padding: 16px;
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+}
+
+.cli-instructions-note {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.cli-instructions code {
+  background-color: var(--bg-tertiary);
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+}
+
 .secret-display {
   position: relative;
   max-width: 700px;
