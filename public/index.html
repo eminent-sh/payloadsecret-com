@@ -35,7 +35,7 @@
 
       <div class="controls">
         <button id="generateBtn" class="btn">Generate</button>
-        <button id="usageBtn" class="btn">Usage</button>
+        <button id="usageBtn" class="btn">How to use</button>
       </div>
 
       <div id="secretContainer" class="secret-container hidden">
@@ -59,76 +59,73 @@
 
       <div id="usageInfo" class="usage-info hidden">
         <div class="usage-section">
-          <h2>Development</h2>
-          <p>Add the secret to your <code>.env</code> file:</p>
-          <pre>PAYLOAD_SECRET="your_generated_secret_here"</pre>
-
-          <p>For local development with Docker, add it to your <code>docker-compose.yml</code> environment variables:
+          <h2>What is <code>PAYLOAD_SECRET</code>?</h2>
+          <p>
+            <code>PAYLOAD_SECRET</code> is a required environment variable for Payload. It is a long,
+            random, unguessable string that Payload uses for encryption workflows — signing and
+            verifying auth tokens, password hashing, and other server-side crypto. It is not an API
+            key you paste into the admin UI; your app reads it from the environment at startup.
           </p>
-          <pre>
-      environment:
-        PAYLOAD_SECRET: "your_generated_secret_here"</pre>
         </div>
 
         <div class="usage-section">
-          <h2>Production</h2>
-          <p>Set the secret in your hosting platform:</p>
-
-          <div class="platform-section">
-            <h3>Vercel</h3>
-            <pre>
-      # Using Vercel CLI
-      vercel env add PAYLOAD_SECRET your_generated_secret_here
-      
-      # Or add via Vercel dashboard:
-      # Project Settings > Environment Variables > Add New</pre>
-          </div>
-
-          <div class="platform-section">
-            <h3>Railway</h3>
-            <pre>
-      # Add via Railway dashboard:
-      # Project Settings > Variables > New Variable
-      PAYLOAD_SECRET=your_generated_secret_here</pre>
-          </div>
-
-          <div class="platform-section">
-            <h3>Netlify</h3>
-            <pre>
-      # Using Netlify CLI
-      netlify env:set PAYLOAD_SECRET your_generated_secret_here
-      
-      # Or add via Netlify dashboard:
-      # Site settings > Environment variables > Add variable</pre>
+          <h2>Environment variable</h2>
+          <p>Add this line to your environment:</p>
+          <div class="secret-display">
+            <pre id="liveEnvExample">PAYLOAD_SECRET="generate a secret above"</pre>
+            <div class="button-group">
+              <button id="copyEnvBtn" class="icon-btn" disabled aria-label="Copy line">
+                <span class="icon">📋</span>
+              </button>
+            </div>
           </div>
         </div>
 
         <div class="usage-section">
-          <h2>Code</h2>
-          <p>In your Payload config:</p>
-          <pre>
-      import { buildConfig } from 'payload/config';
-      
-      export default buildConfig({
-        secret: process.env.PAYLOAD_SECRET,
-        // ... rest of your config
-      });</pre>
+          <h2>Where to set it</h2>
+          <ul class="usage-list">
+            <li>
+              <strong>Local development:</strong> add the line to a <code>.env</code> file at your
+              project root and keep <code>.env</code> out of version control.
+            </li>
+            <li>
+              <strong>Deployed environments:</strong> set <code>PAYLOAD_SECRET</code> in your host's
+              environment-variable settings — same variable name, available to the Node process before
+              Payload starts.
+            </li>
+            <li>
+              <strong>Containers:</strong> pass <code>PAYLOAD_SECRET</code> as an environment variable
+              to your app service.
+            </li>
+          </ul>
+        </div>
 
-          <p>For TypeScript projects:</p>
-          <pre>
-      import { buildConfig } from 'payload/config';
-      import { Config } from 'payload/types';
-      
-      const config: Config = buildConfig({
-        secret: process.env.PAYLOAD_SECRET,
-        // ... rest of your config
-      });
-      
-      export default config;</pre>
+        <div class="usage-section">
+          <h2>In your Payload config</h2>
+          <p>Reference the variable in <code>payload.config.ts</code>:</p>
+          <pre>import { buildConfig } from 'payload'
+
+export default buildConfig({
+  secret: process.env.PAYLOAD_SECRET,
+  // ...
+})</pre>
+          <p>
+            Payload reads <code>process.env.PAYLOAD_SECRET</code> when your config loads. If the
+            variable is missing, Payload will fail at startup.
+            <a href="https://payloadcms.com/docs/configuration/environment-vars" target="_blank" rel="noopener noreferrer">Read more in the Payload docs</a>.
+          </p>
+        </div>
+
+        <div class="usage-section">
+          <h2>Good to know</h2>
+          <ul class="usage-list">
+            <li>Never commit secrets to git or expose them in client-side code (avoid the <code>NEXT_PUBLIC_</code> prefix).</li>
+            <li>Use a unique secret for each environment — local, staging, and production.</li>
+            <li>If a secret is leaked, rotate it; existing sessions and tokens may be invalidated.</li>
+            <li>This generator produces a 32-byte random value encoded as base64, which meets Payload's requirement for a long, unguessable secret.</li>
+          </ul>
         </div>
       </div>
-
-
 
       <div class="footer">
         <a href="https://github.com/eminent-sh/payloadsecret.com" target="_blank" rel="noopener noreferrer">♥ eminent.sh</a>
