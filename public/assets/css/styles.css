@@ -154,15 +154,76 @@ pre {
 .usage-info h2 {
   color: var(--text-primary);
   margin: 0 0 16px 0;
-  font-size: 24px;
+  font-size: 20px;
   border-bottom: 1px solid var(--bg-tertiary);
   padding-bottom: 8px;
 }
 
-.usage-info h3 {
+.live-env-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.live-env-header h2 {
+  margin: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.live-env-example {
+  border: 1px solid var(--bg-tertiary);
+}
+
+.usage-list {
+  color: var(--text-secondary);
+  margin: 12px 0;
+  padding-left: 20px;
+  font-size: 15px;
+}
+
+.usage-list li {
+  margin-bottom: 10px;
+}
+
+.usage-list li:last-child {
+  margin-bottom: 0;
+}
+
+.usage-info a {
   color: var(--text-primary);
-  margin: 20px 0 12px 0;
-  font-size: 18px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.usage-info a:hover {
+  color: var(--accent-hover);
+}
+
+.copy-env-btn {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-tertiary);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.copy-env-btn:hover:not(:disabled) {
+  background-color: var(--text-secondary);
+  color: var(--bg-primary);
+}
+
+.copy-env-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .usage-info p {
@@ -216,15 +277,6 @@ pre {
   font-size: 12px;
   font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
   margin-left: 6px;
-}
-
-/* Platform section spacing */
-.platform-section {
-  margin-bottom: 24px;
-}
-
-.platform-section:last-child {
-  margin-bottom: 0;
 }
 
 /* Copy indicator */

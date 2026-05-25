@@ -1,28 +1,30 @@
 class CopyButton {
-  constructor(buttonElement) {
+  constructor(buttonElement, getValue, eventLabel) {
     this.button = buttonElement;
-    this.copyIcon = this.button.querySelector(".icon");
-    this.initialIcon = this.copyIcon.textContent;
+    this.getValue = getValue;
+    this.eventLabel = eventLabel;
+    this.icon = this.button.querySelector(".icon");
+    this.initialLabel = this.icon
+      ? this.icon.textContent
+      : this.button.textContent;
     this.setupEventListeners();
   }
 
   async copyToClipboard() {
     try {
-      const value = window.getSecret();
+      const value = this.getValue();
       if (!value) return;
 
       await navigator.clipboard.writeText(value);
       this.showCopiedFeedback();
 
-      // Track successful copy
       gtag("event", "copy_secret", {
         event_category: "Interaction",
-        event_label: "Copy Secret",
+        event_label: this.eventLabel,
       });
     } catch (err) {
       console.error("Failed to copy text: ", err);
 
-      // Track copy failure
       gtag("event", "copy_error", {
         event_category: "Error",
         event_label: err.message,
@@ -31,9 +33,17 @@ class CopyButton {
   }
 
   showCopiedFeedback() {
-    this.copyIcon.textContent = "✓";
+    if (this.icon) {
+      this.icon.textContent = "✓";
+      setTimeout(() => {
+        this.icon.textContent = this.initialLabel;
+      }, 2000);
+      return;
+    }
+
+    this.button.textContent = "Copied";
     setTimeout(() => {
-      this.copyIcon.textContent = this.initialIcon;
+      this.button.textContent = this.initialLabel;
     }, 2000);
   }
 
@@ -44,5 +54,8 @@ class CopyButton {
 
 document.addEventListener("DOMContentLoaded", () => {
   const copyBtn = document.getElementById("copyBtn");
-  new CopyButton(copyBtn);
+  new CopyButton(copyBtn, () => window.getSecret(), "Copy Secret");
+
+  const copyEnvBtn = document.getElementById("copyEnvBtn");
+  new CopyButton(copyEnvBtn, () => window.getEnvLine(), "Copy Env Line");
 });
