@@ -18,4 +18,9 @@ Then open `http://localhost:8080/` in a browser.
 
 - There is no linter, test framework, or build step configured in this repo.
 - The app uses browser-native `crypto.getRandomValues()` — no Node.js or npm required.
-- Google Analytics (`gtag.js`) is loaded from an external CDN; it works automatically over HTTP(S) and does not need local configuration.
+- Google Analytics (`gtag.js`) is loaded from an external CDN on the homepage; it works automatically over HTTP(S) and does not need local configuration.
+- `/generate` API hits are tracked server-side via GA4 Measurement Protocol in [`public/_worker.js`](public/_worker.js). This requires a Cloudflare Pages environment variable:
+
+  1. In GA4: **Admin → Data streams → (web stream) → Measurement Protocol API secrets → Create**
+  2. In Cloudflare Pages: set `GA_API_SECRET` to that secret (production). Optionally set `GA_MEASUREMENT_ID` (defaults to `G-8KTZ04YFHP`).
+  3. Deploy. Verify with `curl -fsSL https://payloadsecret.com/generate` and check GA4 **Realtime** for the `api_generate` event.
